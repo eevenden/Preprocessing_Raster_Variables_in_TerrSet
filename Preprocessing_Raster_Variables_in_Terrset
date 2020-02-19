@@ -1,0 +1,55 @@
+# -*- coding: utf-8 -*-
+
+####################################################################################################################################
+#
+# Author: Emily Evenden
+# Title: Processing Raster Variables in Terrset
+# February 19, 2020
+#
+####################################################################################################################################
+
+### Part 1: Directory Set Up
+#
+# This sets up the directories used in the code
+# Imports Windows Python client
+import win32com.client
+
+# Import operating system interface. This allows Python to interact with the Windows operating system.
+import os
+
+# Set IDRISI API to variable IDRISI32 so the rest of the script can access Terrset IDRISI API
+IDRISI32 = win32com.client.Dispatch('IDRISI32.IdrisiAPIServer')
+
+# Print statement to make sure set up is finished
+print "Settings Prepared"
+
+# Set IDRISI working directory path the data folder. If you are using this code, you must update the file path here. 
+IDRISI32.SetWorkingDir(X)
+
+# Set the script's working directory to same data folder. This script creates several files outside
+# of the IDRISI library, and therefore needs a directory as well.
+os.chdir(X)
+
+# Print statement to ensure working directory is set
+print "Working Directory Set"
+
+#################################################################################################################################
+
+### Part 2: Create list of all Raster variables
+# Making a list will allow us to batch process all the files in the folder
+
+variables = [f for f in os.listdir(path) if os.path.isfile( os.path.join(path, f) )]
+
+#################################################################################################################################
+
+### Part 3: Find file projection & reproject and resample
+def print_a_line(line_count, f): 
+	print line_count, f.readline(
+
+
+for v in variables:
+	reference = open(to_file, 'r')
+	def print_a_line(line_count, f): 12 print line_count, f.readline(
+
+
+	IDRISI32.RunModule('PROJECT','1*v*ogref
