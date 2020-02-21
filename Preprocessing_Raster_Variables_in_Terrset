@@ -52,27 +52,24 @@ print variables
 
 #################################################################################################################################
 
-### Part 3: Find file projections
+### Part 3: Find file Projections & Reproject and Resample Imagery             
 
 #Change TerrSet .rdc file to a .txt file
 def change_end_txt(q):
         base = os.path.splitext(q)[0]
         os.rename(q, base + '.txt')
-        print "okay"
+        print "Changd to TXT"
         
 #Change  .txt file to a TerrSet .rdc file 
 def change_end_rdc(s):
-        base = os.path.splitext(q)[0]
-        os.rename(q, base + '.rdc')
-        print "okay"
+        base = os.path.splitext(s)[0]
+        os.rename(s, base + '.rdc')
+        print "Changed back RDC"
 
-#Search folder and change endings of only .rdc files
-for v in variables:
-        if v.endswith(".rdc"):
-                change_end(v)
-                
 #Retreive reference system with in each .txt file             
 for v in variables:
+        if v.endswith(".rdc"):
+                change_end_txt(v)
         if v.endswith(".txt"):
                 ref = []
                 ogref = linecache.getline(v, 7)
@@ -82,14 +79,24 @@ for v in variables:
                 change_end_rdc(v)
                 print "Projection obtained"
 
+                if v.endswith(".rst"):
+                        path = os.path.dirname(os.path.realpath((v)))
+                        print "check"
+                        fname = path + "reproject_" + v
+                        cmdstr = '1*' + v + '*' + ref[3] + '*' + fname + '*' + outref + '*-180.0000000*-180.0000000*-90.0000000*90.0000000*129600*64800*0*1'
+                        IDRISI32.RunModule('PROJECT',cmdstr, 1, "", "", "", "", 1)
+                        print "reproject complete"
+                                       
+#Base = os.path.basename('/root/dir/sub/file.ext')
 #################################################################################################################
                
-### Part 4:  Reproject and Resample               
+### Part 4:  Window and Overlay            
 
-for v in variables:
-        if v.endswith(".rst"):
-                IDRISI32.RunModule('PROJECT','1*v*ref[3]*("reproject_" + v)*outref*-180.0000000*-180.0000000*-90.0000000*90.0000000*0*1', 1, "", "", "", "", 1)
+#for v in variables:
+       #if v.endswith(".rst"):
+                #IDRISI32.RunModule('PROJECT','1*%v*%ref[3]*%("reproject_" + v)*%outref*-180.0000000*-180.0000000*-90.0000000*90.0000000*129600*64800*0*1', 1, "", "", "", "", 1)
 
-                print "reproject complete"
+               # print "reproject complete"
 
 #ex. e.g., "project x 1*island1*latlong*island2*utm-3s*19*42*23*48*640*480*0*1" - need extent image. background value, and which transformation
+
